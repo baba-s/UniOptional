@@ -1,12 +1,15 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Kogane
 {
-	public readonly struct Optional<T>
+	[Serializable]
+	public struct Optional<T>
 	{
-		private readonly T m_value;
+		[SerializeField] private bool m_hasValue;
+		[SerializeField] private T    m_value;
 
-		public bool HasValue { get; }
+		public bool HasValue => m_hasValue;
 
 		public T Value
 		{
@@ -19,8 +22,8 @@ namespace Kogane
 
 		public Optional( T value = default )
 		{
-			m_value  = value;
-			HasValue = true;
+			m_value    = value;
+			m_hasValue = true;
 		}
 
 		public T GetOrDefault()
@@ -46,6 +49,11 @@ namespace Kogane
 		public static implicit operator bool( Optional<T> optional )
 		{
 			return optional.HasValue;
+		}
+
+		public override string ToString()
+		{
+			return JsonUtility.ToJson( this, true );
 		}
 	}
 }
